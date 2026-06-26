@@ -39,6 +39,7 @@ class ViewController: UIViewController {
     private func setupNestScrollView() {
         // 1. 创建 NestScrollView
         nestScrollView = NestScrollView(frame: view.bounds)
+//        nestScrollView.bounces = false
         nestScrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         nestScrollView.contentInsetAdjustmentBehavior = .never
         view.addSubview(nestScrollView)

@@ -144,12 +144,6 @@ extension NestScrollView: UIScrollViewDelegate {
             return
         }
 
-        // Clamp non-bouncing negative offset
-        if !bounces && contentOffset.y < 0 {
-            contentOffset.y = 0
-            return
-        }
-
         let clampedOffset = min(max(contentOffset.y, 0), criticalOffset)
 
         // Collapse header: shift it up so bottom edge stays flush with container
@@ -173,6 +167,9 @@ extension NestScrollView {
     private func innerScrollViewDidScroll(_ inner: UIScrollView) {
         // Inner locked: force contentOffset to zero
         if !innerCanScroll {
+            if !bounces && headerView.frame.origin.y == 0 {
+                return
+            }
             if inner.contentOffset.y != 0 {
                 inner.contentOffset = .zero
             }
