@@ -14,7 +14,6 @@
 		2861471A2FED3A1400A9B9D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2861470F2FED3A1400A9B9D4 /* LaunchScreen.storyboard */; };
 		2861471B2FED3A1400A9B9D4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 286147112FED3A1400A9B9D4 /* Main.storyboard */; };
 		2861471E2FED3A3F00A9B9D4 /* NestScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2861471D2FED3A3F00A9B9D4 /* NestScrollView.swift */; };
-		286147202FED3A8600A9B9D4 /* ScrollViewDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2861471F2FED3A8600A9B9D4 /* ScrollViewDelegateProxy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +26,6 @@
 		286147122FED3A1400A9B9D4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		286147132FED3A1400A9B9D4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		2861471D2FED3A3F00A9B9D4 /* NestScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestScrollView.swift; sourceTree = "<group>"; };
-		2861471F2FED3A8600A9B9D4 /* ScrollViewDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewDelegateProxy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,7 +74,6 @@
 			isa = PBXGroup;
 			children = (
 				2861471D2FED3A3F00A9B9D4 /* NestScrollView.swift */,
-				2861471F2FED3A8600A9B9D4 /* ScrollViewDelegateProxy.swift */,
 			);
 			name = Sources;
 			path = ../Sources;
@@ -160,7 +157,6 @@
 				286147162FED3A1400A9B9D4 /* SceneDelegate.swift in Sources */,
 				286147172FED3A1400A9B9D4 /* ViewController.swift in Sources */,
 				2861471E2FED3A3F00A9B9D4 /* NestScrollView.swift in Sources */,
-				286147202FED3A8600A9B9D4 /* ScrollViewDelegateProxy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,6 +196,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -231,6 +228,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

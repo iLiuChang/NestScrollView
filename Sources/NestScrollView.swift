@@ -22,20 +22,14 @@ open class NestScrollView: UIScrollView {
     
     open weak var trackedInnerScrollView: UIScrollView? {
         didSet {
+            innerContentOffset?.invalidate()
             guard let scrollView = trackedInnerScrollView else {
-                self.proxy = nil
                 return
             }
-            if let oldProxy = oldValue?.delegate as? ScrollViewDelegateProxy {
-                oldValue?.delegate = oldProxy.originalDelegate
-            }
-            let proxy = ScrollViewDelegateProxy()
-            proxy.originalDelegate = scrollView.delegate
-            proxy.didScrollHandler = { [weak self] scrollView in
+            
+            innerContentOffset = scrollView.observe(\.contentOffset, options: .new) { [weak self] scrollView, value in
                 self?.innerScrollViewDidScroll(scrollView)
             }
-            self.proxy = proxy
-            scrollView.delegate = proxy
         }
     }
 
@@ -52,8 +46,9 @@ open class NestScrollView: UIScrollView {
     private let contentView = UIView()
     private var outerCanScroll = true
     private var innerCanScroll = false
+    private var isUpdatingInnerContentOffset = false
+    private var innerContentOffset: NSKeyValueObservation?
 
-    private var proxy: ScrollViewDelegateProxy?
     // MARK: Init
 
     public override init(frame: CGRect) {
@@ -70,6 +65,11 @@ open class NestScrollView: UIScrollView {
         super.layoutSubviews()
         reloadLayout()
     }
+    
+    deinit {
+        innerContentOffset?.invalidate()
+    }
+
 }
 
 private extension NestScrollView {
@@ -165,6 +165,12 @@ extension NestScrollView: UIScrollViewDelegate {
 
 extension NestScrollView {
     private func innerScrollViewDidScroll(_ inner: UIScrollView) {
+        guard !isUpdatingInnerContentOffset else {
+            return
+        }
+        isUpdatingInnerContentOffset = true
+        defer { isUpdatingInnerContentOffset = false }
+
         // Inner locked: force contentOffset to zero
         if !innerCanScroll {
             if !bounces && headerView.frame.origin.y == 0 {
