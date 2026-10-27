@@ -23,11 +23,12 @@ open class NestScrollView: UIScrollView {
     open weak var trackedInnerScrollView: UIScrollView? {
         didSet {
             innerContentOffset?.invalidate()
+            innerContentOffset = nil
             guard let scrollView = trackedInnerScrollView else {
                 return
             }
             
-            innerContentOffset = scrollView.observe(\.contentOffset, options: .new) { [weak self] scrollView, value in
+            innerContentOffset = scrollView.observe(\.contentOffset, options: .new) { [weak self] scrollView, _ in
                 self?.innerScrollViewDidScroll(scrollView)
             }
         }
@@ -39,7 +40,9 @@ open class NestScrollView: UIScrollView {
     }
 
     /// Minimum header height (height when fully collapsed, default 0)
-    open var headerMinHeight: CGFloat = 0
+    open var headerMinHeight: CGFloat = 0 {
+        didSet { reloadLayout() }
+    }
 
     // MARK: Private
 
@@ -48,6 +51,11 @@ open class NestScrollView: UIScrollView {
     private var innerCanScroll = false
     private var isUpdatingInnerContentOffset = false
     private var innerContentOffset: NSKeyValueObservation?
+    private var lastProgress: CGFloat = -1
+
+    private var criticalOffset: CGFloat {
+        max(headerMaxHeight - headerMinHeight, 0)
+    }
 
     // MARK: Init
 
@@ -89,46 +97,47 @@ private extension NestScrollView {
 
     func reloadLayout() {
 
-        guard bounds.width > 0, headerMaxHeight > 0 else {
+        guard bounds.width > 0 else {
             return
         }
 
-        let maxH = headerMaxHeight
+        let width = bounds.width
+        let maxH = max(headerMaxHeight, 0)
+        let minH = min(max(headerMinHeight, 0), maxH)
 
-        let effectiveContainerH: CGFloat = bounds.height
+        // Visible area for container when header is fully collapsed
+        let containerH = max(bounds.height - minH, 0)
+        let totalH = maxH + containerH
 
-        contentView.frame = CGRect(
-            x: 0,
-            y: 0,
-            width: bounds.width,
-            height: maxH + effectiveContainerH
-        )
+        let contentFrame = CGRect(x: 0, y: 0, width: width, height: totalH)
+        let headerFrame = CGRect(x: 0, y: 0, width: width, height: maxH)
+        let containerFrame = CGRect(x: 0, y: maxH, width: width, height: containerH)
 
-        headerView.frame = CGRect(
-            x: 0,
-            y: 0,
-            width: bounds.width,
-            height: maxH
-        )
+        if contentView.frame != contentFrame {
+            contentView.frame = contentFrame
+        }
+        if headerView.frame != headerFrame {
+            headerView.frame = headerFrame
+        }
+        if containerView.frame != containerFrame {
+            containerView.frame = containerFrame
+        }
+        if contentSize != contentFrame.size {
+            contentSize = contentFrame.size
+        }
+    }
 
-        containerView.frame = CGRect(
-            x: 0,
-            y: maxH,
-            width: bounds.width,
-            height: effectiveContainerH
-        )
-
-        contentSize = CGSize(
-            width: bounds.width,
-            height: maxH + effectiveContainerH
-        )
+    func notifyProgress(_ progress: CGFloat) {
+        guard progress != lastProgress else { return }
+        lastProgress = progress
+        nestDelegate?.nestScrollView?(self, didChangeCollapseProgress: progress)
     }
 }
 
 extension NestScrollView: UIScrollViewDelegate {
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let criticalOffset = max(headerMaxHeight - headerMinHeight, 0)
+        let criticalOffset = criticalOffset
         guard criticalOffset > 0 else { return }
 
         // Bounce-back: reset inner scroll when outer bounces past top
@@ -140,25 +149,22 @@ extension NestScrollView: UIScrollViewDelegate {
 
         // Outer locked: hold position at criticalOffset
         if !outerCanScroll {
-            contentOffset.y = criticalOffset
+            if contentOffset.y != criticalOffset {
+                contentOffset.y = criticalOffset
+            }
             return
         }
 
         let clampedOffset = min(max(contentOffset.y, 0), criticalOffset)
-
-        // Collapse header: shift it up so bottom edge stays flush with container
-        let collapse = clampedOffset
-        let progress = collapse / criticalOffset
-        headerView.frame.origin.y = -collapse
-
-        // Notify delegate
-        nestDelegate?.nestScrollView?(self, didChangeCollapseProgress: progress)
+        notifyProgress(clampedOffset / criticalOffset)
 
         // Header fully collapsed: lock outer, unlock inner
         if contentOffset.y >= criticalOffset {
-            contentOffset.y = criticalOffset
             outerCanScroll = false
             innerCanScroll = true
+            if contentOffset.y != criticalOffset {
+                contentOffset.y = criticalOffset
+            }
         }
     }
 }
@@ -168,12 +174,17 @@ extension NestScrollView {
         guard !isUpdatingInnerContentOffset else {
             return
         }
+        // No collapsible header: inner scrolls freely
+        guard criticalOffset > 0 else {
+            return
+        }
         isUpdatingInnerContentOffset = true
         defer { isUpdatingInnerContentOffset = false }
 
         // Inner locked: force contentOffset to zero
         if !innerCanScroll {
-            if !bounces && headerView.frame.origin.y == 0 {
+            // Outer can't bounce and header fully expanded: let inner handle pull-down (e.g. refresh)
+            if !bounces && contentOffset.y <= 0 && inner.contentOffset.y < 0 {
                 return
             }
             if inner.contentOffset.y != 0 {
@@ -186,7 +197,9 @@ extension NestScrollView {
         if inner.contentOffset.y <= 0 {
             innerCanScroll = false
             outerCanScroll = true
-            inner.contentOffset = .zero
+            if inner.contentOffset.y != 0 {
+                inner.contentOffset = .zero
+            }
         }
     }
 }
@@ -199,6 +212,10 @@ extension NestScrollView: UIGestureRecognizerDelegate {
         _ gestureRecognizer: UIGestureRecognizer,
         shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
     ) -> Bool {
-        return true
+        guard gestureRecognizer === panGestureRecognizer,
+              let inner = trackedInnerScrollView else {
+            return false
+        }
+        return otherGestureRecognizer === inner.panGestureRecognizer
     }
 }
