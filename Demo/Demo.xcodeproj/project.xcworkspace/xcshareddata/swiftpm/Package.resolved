@@ -1,0 +1,15 @@
+{
+  "originHash" : "0b3889ccb02fdf27e92f688549f9107361f0131bfb9b512a2a33af7dc16eee87",
+  "pins" : [
+    {
+      "identity" : "pagingmenu",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/iLiuChang/PagingMenu.git",
+      "state" : {
+        "revision" : "2452dd513dd0bb8a217f68221085f9a1db769aae",
+        "version" : "2.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}

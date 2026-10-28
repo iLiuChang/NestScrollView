@@ -12,8 +12,8 @@
 		286147172FED3A1400A9B9D4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 286147132FED3A1400A9B9D4 /* ViewController.swift */; };
 		286147182FED3A1400A9B9D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2861470C2FED3A1400A9B9D4 /* Assets.xcassets */; };
 		2861471A2FED3A1400A9B9D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2861470F2FED3A1400A9B9D4 /* LaunchScreen.storyboard */; };
-		2861471B2FED3A1400A9B9D4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 286147112FED3A1400A9B9D4 /* Main.storyboard */; };
 		2861471E2FED3A3F00A9B9D4 /* NestScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2861471D2FED3A3F00A9B9D4 /* NestScrollView.swift */; };
+		B3BC31DA309191CA0058EEE6 /* PagingMenu in Frameworks */ = {isa = PBXBuildFile; productRef = B3BC31D9309191CA0058EEE6 /* PagingMenu */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,7 +22,6 @@
 		2861470C2FED3A1400A9B9D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2861470D2FED3A1400A9B9D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2861470E2FED3A1400A9B9D4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		286147102FED3A1400A9B9D4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		286147122FED3A1400A9B9D4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		286147132FED3A1400A9B9D4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		2861471D2FED3A3F00A9B9D4 /* NestScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestScrollView.swift; sourceTree = "<group>"; };
@@ -33,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3BC31DA309191CA0058EEE6 /* PagingMenu in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,7 +62,6 @@
 				2861470C2FED3A1400A9B9D4 /* Assets.xcassets */,
 				2861470D2FED3A1400A9B9D4 /* Info.plist */,
 				2861470F2FED3A1400A9B9D4 /* LaunchScreen.storyboard */,
-				286147112FED3A1400A9B9D4 /* Main.storyboard */,
 				286147122FED3A1400A9B9D4 /* SceneDelegate.swift */,
 				286147132FED3A1400A9B9D4 /* ViewController.swift */,
 				2861471C2FED3A2A00A9B9D4 /* Sources */,
@@ -96,6 +95,7 @@
 			);
 			name = Demo;
 			packageProductDependencies = (
+				B3BC31D9309191CA0058EEE6 /* PagingMenu */,
 			);
 			productName = Demo;
 			productReference = 286146F32FED39E500A9B9D4 /* Demo.app */;
@@ -125,6 +125,9 @@
 			);
 			mainGroup = 286146EA2FED39E500A9B9D4;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B3BC31D8309191CA0058EEE6 /* XCRemoteSwiftPackageReference "PagingMenu" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 286146F42FED39E500A9B9D4 /* Products */;
 			projectDirPath = "";
@@ -142,7 +145,6 @@
 			files = (
 				286147182FED3A1400A9B9D4 /* Assets.xcassets in Resources */,
 				2861471A2FED3A1400A9B9D4 /* LaunchScreen.storyboard in Resources */,
-				2861471B2FED3A1400A9B9D4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,14 +173,6 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		286147112FED3A1400A9B9D4 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				286147102FED3A1400A9B9D4 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -193,7 +187,6 @@
 				INFOPLIST_FILE = Demo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -225,7 +218,6 @@
 				INFOPLIST_FILE = Demo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -387,6 +379,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B3BC31D8309191CA0058EEE6 /* XCRemoteSwiftPackageReference "PagingMenu" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/iLiuChang/PagingMenu.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B3BC31D9309191CA0058EEE6 /* PagingMenu */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3BC31D8309191CA0058EEE6 /* XCRemoteSwiftPackageReference "PagingMenu" */;
+			productName = PagingMenu;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 286146EB2FED39E500A9B9D4 /* Project object */;
 }
