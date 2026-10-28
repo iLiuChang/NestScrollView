@@ -19,7 +19,7 @@ A nested scrolling container for iOS. Built as a `UIScrollView` with a collapsib
 - **Collapsible Header** — expand / collapse between `headerMaxHeight` and `headerMinHeight`
 - **Hand-off Scrolling** — seamless transition between the outer and inner scroll views
 - **Any Inner Scroll View** — track a `UITableView`, `UICollectionView`, or plain `UIScrollView`
-- **Progress Callback** — receive collapse progress (`0...1`) through `NestScrollViewDelegate`
+- **Progress Callback** — receive header progress through `NestScrollViewDelegate` (`< 0` overscroll, `0` expanded, `1` collapsed)
 - **Simultaneous Gestures** — only recognizes simultaneously with the tracked inner scroll view
 - **Pull-to-Refresh Friendly** — when `bounces` is `false`, the inner scroll view can still pull down at the top
 
@@ -89,11 +89,28 @@ nestScrollView.trackedInnerScrollView = tableView
 
 ### Collapse Progress
 
+`progress` is `contentOffset.y / (headerMaxHeight - headerMinHeight)`:
+
+| Value | Meaning |
+|---|---|
+| `< 0` | Pulled past the fully expanded position (outer bounce / overscroll) |
+| `0` | Fully expanded |
+| `1` | Fully collapsed |
+
 ```swift
 extension ViewController: NestScrollViewDelegate {
     func nestScrollView(_ scrollView: NestScrollView, didChangeCollapseProgress progress: CGFloat) {
-        // 0 = fully expanded, 1 = fully collapsed
-        scrollView.headerView.alpha = 1.0 - progress
+        scrollView.headerView.alpha = min(max(1.0 - progress, 0.3), 1.0)
+
+        // Stretch the header background while overscrolling
+        if progress < 0 {
+            let pull = -progress * (scrollView.headerMaxHeight - scrollView.headerMinHeight)
+            let height = headerBackground.bounds.height
+            let scale = (height + pull) / max(height, 1)
+            headerBackground.transform = CGAffineTransform(a: scale, b: 0, c: 0, d: scale, tx: 0, ty: -pull / 2)
+        } else {
+            headerBackground.transform = .identity
+        }
     }
 }
 ```
@@ -145,7 +162,7 @@ With `bounces = false`:
 
 | Method | Description |
 |---|---|
-| `nestScrollView(_:didChangeCollapseProgress:)` | Optional. Called when the collapse progress changes. `0` is fully expanded, `1` is fully collapsed. |
+| `nestScrollView(_:didChangeCollapseProgress:)` | Optional. Called when header progress changes. `< 0` overscroll, `0` fully expanded, `1` fully collapsed. |
 
 ## Architecture
 
@@ -159,7 +176,7 @@ With `bounces = false`:
 
 ## Example
 
-Open `Demo/Demo.xcodeproj` and run the demo target. The sample combines `NestScrollView` with [PagingMenu](https://github.com/iLiuChang/PagingMenu) for a collapsible header plus a multi-page list.
+Open `Demo/Demo.xcodeproj` and run the demo target. The sample combines `NestScrollView` with [PagingMenu](https://github.com/iLiuChang/PagingMenu) for a collapsible header plus a multi-page list, and uses negative progress to stretch the header gradient on pull-down.
 
 ## License
 

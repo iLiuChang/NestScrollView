@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     private let pagingMenu = PagingMenuController()
     private let menuTitles = ["推荐", "热门", "最新"]
     private var tableViews: [UITableView] = []
+    private let gradientView = GradientView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +58,6 @@ class ViewController: UIViewController {
         gradient.startPoint = CGPoint(x: 0, y: 0)
         gradient.endPoint = CGPoint(x: 1, y: 1)
 
-        let gradientView = GradientView()
         gradientView.gradientLayer = gradient
         gradientView.translatesAutoresizingMaskIntoConstraints = false
         header.addSubview(gradientView)
@@ -212,6 +212,17 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 extension ViewController: NestScrollViewDelegate {
 
     func nestScrollView(_ scrollView: NestScrollView, didChangeCollapseProgress progress: CGFloat) {
-        scrollView.headerView.alpha = max(1.0 - progress, 0.3)
+        scrollView.headerView.alpha = min(max(1.0 - progress, 0.3), 1.0)
+
+        if progress < 0 {
+            // Stretch upward to cover the bounce gap (avoid white at the top).
+            let pull = -progress * (scrollView.headerMaxHeight - scrollView.headerMinHeight)
+            let height = gradientView.bounds.height
+            let scale = (height + pull) / max(height, 1)
+            let ty = -pull / 2
+            gradientView.transform = CGAffineTransform(a: scale, b: 0, c: 0, d: scale, tx: 0, ty: ty)
+        } else {
+            gradientView.transform = .identity
+        }
     }
 }
