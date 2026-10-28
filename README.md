@@ -106,6 +106,22 @@ When the visible page changes (for example with a paging menu), update the track
 nestScrollView.trackedInnerScrollView = currentTableView
 ```
 
+### Disable Outer Bounce
+
+By default `bounces` is `true`, so pulling down while the header is fully expanded bounces the outer scroll view.
+
+Set `bounces` to `false` when you want that pull-down to go to the inner scroll view instead — for example to drive a pull-to-refresh on the list:
+
+```swift
+nestScrollView.bounces = false
+```
+
+With `bounces = false`:
+
+- The outer scroll view no longer rubber-bands past the top
+- When the header is fully expanded, a downward pull is handled by `trackedInnerScrollView` (so its refresh header can trigger)
+- Collapsing and expanding the header still works the same way once you scroll up
+
 ### Layout Notes
 
 - Put header content in `headerView`, and the main content in `containerView`

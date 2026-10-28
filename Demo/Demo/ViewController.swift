@@ -34,6 +34,7 @@ class ViewController: UIViewController {
         nestScrollView.headerMaxHeight = 200
         nestScrollView.headerMinHeight = 62
         nestScrollView.nestDelegate = self
+//        nestScrollView.bounces = false
         nestScrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(nestScrollView)
 
